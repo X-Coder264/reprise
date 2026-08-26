@@ -700,6 +700,7 @@ layered on top of Webpack stays, as a Reprise plugin option:
 Webpack Encore                             Reprise
 =========================================  ===========================================================================================
 ``setOutputPath()`` / ``setPublicPath()``  plugin ``outputPath`` / ``publicPath`` (the defaults fit a standard project)
+``setManifestKeyPrefix()``                 plugin ``manifestKeyPrefix`` (see `Using a CDN`_)
 ``addEntry()`` / ``addEntries()``          the bundler's own entry input: Vite ``build.rollupOptions.input``, Rsbuild ``source.entry``
 ``enableVersioning()``                     nothing to do, content hashing is on by default
 ``enableIntegrityHashes()``                plugin ``integrity: { enabled: true }`` (see `Subresource Integrity`_)
@@ -716,11 +717,17 @@ Webpack Encore                                                                  
 ``enableSassLoader()`` / ``enableLessLoader()`` / ``enableStylusLoader()``           install the preprocessor and import the file (Vite out of the box, Rsbuild via ``@rsbuild/plugin-sass`` and friends)
 ``enablePostCssLoader()``                                                            add a ``postcss.config.js``, picked up automatically
 ``enableTypeScriptLoader()`` / ``configureBabel()`` / ``configureBabelPresetEnv()``  native transpilation (Vite via esbuild, Rsbuild via SWC); set targets with ``browserslist`` or ``build.target``
-``splitEntryChunks()`` / ``configureSplitChunks()``                                  native code splitting
+``enableForkedTypeScriptTypesChecking()`` / ``enableBabelTypeScriptPreset()``        run ``tsc --noEmit`` (or ``vue-tsc``) as its own script, outside the build
+``splitEntryChunks()`` / ``configureSplitChunks()`` / ``addCacheGroup()``            native code splitting
+``enableSingleRuntimeChunk()`` / ``disableSingleRuntimeChunk()``                     native runtime chunk management
 ``enableSourceMaps()``                                                               native (Vite ``build.sourcemap``)
 ``configureImageRule()`` / ``configureFontRule()`` / ``configureFilenames()``        native asset handling and output naming
+``addStyleEntry()``                                                                  add the stylesheet as an entry input, or import it from a JS entry
+``configureDefinePlugin()``                                                          Vite ``define``, Rsbuild ``source.define``
+``disableCssExtraction()`` / ``configureCssLoader()`` / ``configureStyleLoader()``   native CSS handling (extraction, minification)
 ``addAliases()``                                                                     ``resolve.alias``
 ``addExternals()``                                                                   Vite ``build.rollupOptions.external``, Rsbuild ``output.externals``
+``enableBuildCache()`` / ``configureWatchOptions()``                                 native build caching and watch
 ``cleanupOutputBeforeBuild()``                                                       native (Vite ``build.emptyOutDir``, Rsbuild cleans by default)
 ===================================================================================  ====================================================================================================================
 
@@ -741,8 +748,16 @@ A few Encore features have no direct replacement:
   ``@rollup/plugin-inject`` under Vite or ``rspack.ProvidePlugin`` (through Rsbuild's ``tools.rspack``).
 - ``enableBuildNotifications()`` and the ESLint integration are gone: run your linter as its own script, outside the
   build.
-- ``Encore.isProduction()`` / ``isDev()`` / ``when()``: branch on the bundler mode instead, e.g.
+- ``Encore.isProduction()`` / ``isDev()`` / ``isDevServer()`` / ``when()``: branch on the bundler mode instead, e.g.
   ``defineConfig(({ command }) => ...)`` where ``command`` is ``'build'`` or the dev command.
+- ``addLoader()`` / ``addRule()`` / ``addPlugin()`` / ``configureLoaderRule()``: these were escape hatches into the
+  raw Webpack config; edit the bundler config directly (Vite ``plugins``, Rsbuild ``tools.rspack``).
+- ``enableHandlebarsLoader()``: add the bundler's own Handlebars plugin if you still need it.
+- ``configureRuntimeEnvironment()`` / ``clearRuntimeEnvironment()`` / ``isRuntimeEnvironmentConfigured()`` /
+  ``reset()``: Encore's own bootstrap and reset plumbing, no counterpart here.
+- The remaining ``configure*Plugin()`` calls (``configureManifestPlugin()``, ``configureMiniCssExtractPlugin()``,
+  ``configureCssMinimizerPlugin()``, ``configureJsMinimizerPlugin()``, ``configureFriendlyErrorsPlugin()``): tuned
+  Webpack internals that Reprise and the bundlers now own; nothing to port.
 
 .. _Vite: https://vite.dev/
 .. _Rsbuild: https://rsbuild.dev/
