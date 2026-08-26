@@ -21,9 +21,6 @@
   📣 <a href="https://symfony.com/blog/introducing-symfony-reprise-the-symfony-integration-layer-for-modern-bundlers">Read the announcement blog post</a>
 </p>
 
-> [!WARNING]
-> **Experimental** this bundle is experimental and is likely to change, or even change drastically.
-
 Symfony Reprise covers only the Symfony-side glue the bundlers leave out:
 
 - 🎯 **Multiple entries**: build several independent entry points from one config

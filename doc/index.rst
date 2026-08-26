@@ -1,11 +1,6 @@
 Symfony Reprise
 ===============
 
-.. warning::
-
-    This bundle is experimental and is likely to change, or even change
-    drastically.
-
 Webpack Encore gave Symfony first-class asset integration for Webpack. Symfony Reprise brings the same to `Vite`_
 and `Rsbuild`_.
 
@@ -758,6 +753,12 @@ A few Encore features have no direct replacement:
 - The remaining ``configure*Plugin()`` calls (``configureManifestPlugin()``, ``configureMiniCssExtractPlugin()``,
   ``configureCssMinimizerPlugin()``, ``configureJsMinimizerPlugin()``, ``configureFriendlyErrorsPlugin()``): tuned
   Webpack internals that Reprise and the bundlers now own; nothing to port.
+
+Backward Compatibility promise
+------------------------------
+
+This bundle aims at following the same Backward Compatibility promise as the Symfony framework:
+https://symfony.com/doc/current/contributing/code/bc.html
 
 .. _Vite: https://vite.dev/
 .. _Rsbuild: https://rsbuild.dev/
